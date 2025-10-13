@@ -19,6 +19,11 @@ yarn-debug.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Test / Coverage
+coverage/
+*.test.js
+*.spec.js
+
 # OS / IDE files
 .DS_Store
 .vscode/
@@ -28,6 +33,8 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*.bak
+*.tmp
 
 # Env files (safety)
 .env
