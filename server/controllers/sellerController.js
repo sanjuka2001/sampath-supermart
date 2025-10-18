@@ -19,9 +19,9 @@
             maxAge: 7 * 24 * 60 * 60 * 1000, 
          });
 
-        return res.json({sucess: true, message: "Logged In"});
+        return res.json({success: true, message: "Logged In"});
     } else{
-        return res.json({sucess: false, message: "Invalid Credentials"});
+        return res.json({success: false, message: "Invalid Credentials"});
     }
 
 
