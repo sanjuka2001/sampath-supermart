@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../../context/AppContext'
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SellerLogin = () => {
-      const{isSeller, setIsSeller, navigate}= useAppContext()
+       const navigate = useNavigate(); 
+      const{isSeller, setIsSeller,axios}= useAppContext()
       const[email,setEmail] = useState("");
       const[password,setPassword] = useState("");
 
       const onSubmitHandler = async (event)=> {
-         event.preventDefault();
-         setIsSeller(true)
+         
+         try {
+          event.preventDefault();
+          const {data} = await axios.post('/api/seller/login', {email,password})
+          if (data.success) {
+             setIsSeller(true)
+             navigate('/seller')
+          }else{
+            toast.error(data.message || 'Login failed')
+          }
+
+         } catch (error) {
+           toast.error(error.message)
+         }
 
       }
      
