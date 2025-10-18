@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import { assets, categories } from '../../assets/assets';
+import toast from "react-hot-toast";
+import { useAppContext } from '../../context/AppContext'; 
+
+
 
 const AddProduct = () => {
 
@@ -9,9 +13,48 @@ const AddProduct = () => {
     const [category, setCategory] = useState('');
     const [price, setPrice] = useState('');
     const [offerPrice,setOfferPrice] = useState('');
+    const { axios } = useAppContext();
+
 
     const onSubmitHandler = async (event) =>{
-        event.preventDefault();
+
+        try {
+            
+            event.preventDefault();
+            const productData ={
+                name,
+                description: description.split('/n'),
+                category,
+                price,
+                offerPrice
+            }
+
+            const formData = new FormData();
+            formData.append('productData',JSON.stringify(productData));
+            for (let i = 0; i < files.length; i++) {
+                formData.append('images',files[i])
+                
+            }
+            const {data} = await axios.post('/api/product/add', formData)
+
+            if(data.success){
+                toast.success(data.message);
+                setName('');
+                setDescription('')
+                setCategory('')
+                setPrice('')
+                setOfferPrice('')
+                setFiles([])
+            }else{
+
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+                toast.error(error.message)
+        }
+        
+        
     }
  
     return (
@@ -20,18 +63,18 @@ const AddProduct = () => {
                 <div>
                     <p className="text-base font-medium">Product Image</p>
                     <div className="flex flex-wrap items-center gap-3 mt-2">
-                        {Array(4).fill('').map((_, index) => (
-                            <label key={index} htmlFor={`image${index}`}>
+                        {Array(4).fill('').map((_, i) => (
+                            <label key={i} htmlFor={`image${i}`}>
 
                                 <input onChange={(e)=>{
                                     const updatedFiles = [...files];
-                                    updatedFiles[index] = e.target.files[0]
+                                    updatedFiles[i] = e.target.files[0]
                                     setFiles(updatedFiles)
                                 }} 
-                                type="file" id={`image${index}`} hidden />
+                                type="file" id={`image${i}`} hidden />
 
-                                <img className="max-w-24 cursor-pointer" src={files[index] ?
-                                     URL.createObjectURL(files[index]): assets.upload_area} 
+                                <img className="max-w-24 cursor-pointer" src={files[i] ?
+                                     URL.createObjectURL(files[i]): assets.upload_area} 
                                      alt="uploadArea" width={100} height={100} />
                             </label>
                         ))}
@@ -53,8 +96,8 @@ const AddProduct = () => {
                     <select onChange={(e)=> setCategory(e.target.value)} value={category} 
                     id="category" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40">
                         <option value="">Select Category</option>
-                        {categories.map((item,index)=>(
-                            <option key={index} value={item.path}>{item.path}</option>
+                        {categories.map((item,i)=>(
+                            <option key={i} value={item.path}>{item.path}</option>
                         ))}
                     </select>
                 </div>
