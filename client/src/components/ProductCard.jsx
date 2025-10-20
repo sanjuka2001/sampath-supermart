@@ -30,7 +30,7 @@ const ProductCard = ({product}) => {
                     <div onClick={(e)=>{e.stopPropagation();}} className="text-red-600">
                         {!cartItems[product._id] ? (
                             <button className="flex items-center justify-center gap-1 bg-red-200 border border-red-300 md:w-[80px] w-[64px] h-[34px] rounded cursor-pointer " onClick={() => addToCart(product._id)} >
-                               <img src={assets.cart_icon} alt="cart icon "  />
+                               
                                 Add
                             </button>
                         ) : (
